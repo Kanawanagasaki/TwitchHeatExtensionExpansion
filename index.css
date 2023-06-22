@@ -1,0 +1,18 @@
+body {
+    background-color: rgba(0, 0, 0, 0);
+    /* background-image: url(/img/stream.png);
+    background-size: cover; */
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+
+    position: absolute;
+    inset: 0;
+}
+
+#cnvs {
+    position: relative;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}

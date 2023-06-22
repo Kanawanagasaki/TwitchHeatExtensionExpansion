@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "none",
+    "noImplicitAny": true,
+    "outFile": "./index.js",
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "rootDir": "./src",
+    "sourceMap": true,
+    "target": "ESNext",
+    "moduleResolution": "node"
+  }
+}
