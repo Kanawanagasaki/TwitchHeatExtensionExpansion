@@ -28,26 +28,47 @@ document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const channelId = urlParams.get('channelId');
 
-    const ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId); // 128142135, 57519051
-    ws.onmessage = ev => {
+    var ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);  // 128142135, 57519051
+    
+    function wsOnMessage(ev: MessageEvent<any>) {
         const data = JSON.parse(ev.data);
-
-        if (data.type == "click") {
+        if (data.type == "click")
             createOrMovePoint(data.id, parseFloat(data.x), parseFloat(data.y));
-        }
-    };
+    }
 
-    // const messagesRes = await fetch("/messages3.json");
-    // const messages = await messagesRes.json();
-    // let counter = 0;
-    // const intervalId = setInterval(() => {
-    //     const message = messages[counter % messages.length];
-    //     if (message.type == "click") {
-    //         createOrMovePoint(message.id, parseFloat(message.x), parseFloat(message.y));
-    //     }
-    //     counter++;
+    function wsOnError() {
+        ws.close();
+        ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+        ws.onmessage = wsOnMessage;
+        ws.onerror = wsOnError;
+        ws.onclose = wsOnClose;
+    }
 
-    // }, 25);
+    function wsOnClose() {
+        ws.close();
+        ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+        ws.onmessage = wsOnMessage;
+        ws.onerror = wsOnError;
+        ws.onclose = wsOnClose;
+    }
+
+    ws.onmessage = wsOnMessage;
+    ws.onerror = wsOnError;
+    ws.onclose = wsOnClose;
+
+    // setTimeout(async () => {
+    //     const messagesRes = await fetch("/messages1.json");
+    //     const messages = await messagesRes.json();
+    //     let counter = 0;
+    //     const intervalId = setInterval(() => {
+    //         const message = messages[counter % messages.length];
+    //         if (message.type == "click") {
+    //             createOrMovePoint(message.id, parseFloat(message.x), parseFloat(message.y));
+    //         }
+    //         counter++;
+
+    //     }, 25);
+    // }, 1500);
 
     function draw() {
         CTX.clearRect(0, 0, WIDTH, HEIGHT);

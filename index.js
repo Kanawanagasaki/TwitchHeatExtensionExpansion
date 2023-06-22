@@ -367,13 +367,29 @@ document.addEventListener("DOMContentLoaded", async function () {
     CTX.font = "bold 34px Arial";
     const urlParams = new URLSearchParams(window.location.search);
     const channelId = urlParams.get('channelId');
-    const ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
-    ws.onmessage = ev => {
+    var ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+    function wsOnMessage(ev) {
         const data = JSON.parse(ev.data);
-        if (data.type == "click") {
+        if (data.type == "click")
             createOrMovePoint(data.id, parseFloat(data.x), parseFloat(data.y));
-        }
-    };
+    }
+    function wsOnError() {
+        ws.close();
+        ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+        ws.onmessage = wsOnMessage;
+        ws.onerror = wsOnError;
+        ws.onclose = wsOnClose;
+    }
+    function wsOnClose() {
+        ws.close();
+        ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+        ws.onmessage = wsOnMessage;
+        ws.onerror = wsOnError;
+        ws.onclose = wsOnClose;
+    }
+    ws.onmessage = wsOnMessage;
+    ws.onerror = wsOnError;
+    ws.onclose = wsOnClose;
     function draw() {
         CTX.clearRect(0, 0, WIDTH, HEIGHT);
         const clusters = new Set();
