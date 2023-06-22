@@ -38,14 +38,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function wsOnError() {
         ws.close();
-
-        setTimeout(() => {
-            ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
-            ws.onmessage = wsOnMessage;
-            ws.onerror = wsOnError;
-            ws.onclose = wsOnClose;
-        }, 5000);
-
         console.log("wsOnError");
     }
 
