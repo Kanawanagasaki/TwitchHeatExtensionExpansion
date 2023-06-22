@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const channelId = urlParams.get('channelId');
 
     var ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);  // 128142135, 57519051
-    
+
     function wsOnMessage(ev: MessageEvent<any>) {
         const data = JSON.parse(ev.data);
         if (data.type == "click")
@@ -38,18 +38,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function wsOnError() {
         ws.close();
-        ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
-        ws.onmessage = wsOnMessage;
-        ws.onerror = wsOnError;
-        ws.onclose = wsOnClose;
+
+        setTimeout(() => {
+            ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+            ws.onmessage = wsOnMessage;
+            ws.onerror = wsOnError;
+            ws.onclose = wsOnClose;
+        }, 5000);
+
+        console.log("wsOnError");
     }
 
     function wsOnClose() {
         ws.close();
-        ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
-        ws.onmessage = wsOnMessage;
-        ws.onerror = wsOnError;
-        ws.onclose = wsOnClose;
+
+        setTimeout(() => {
+            ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+            ws.onmessage = wsOnMessage;
+            ws.onerror = wsOnError;
+            ws.onclose = wsOnClose;
+        }, 5000);
+
+        console.log("wsOnClose");
     }
 
     ws.onmessage = wsOnMessage;

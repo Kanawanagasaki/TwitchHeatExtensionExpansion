@@ -375,17 +375,23 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     function wsOnError() {
         ws.close();
-        ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
-        ws.onmessage = wsOnMessage;
-        ws.onerror = wsOnError;
-        ws.onclose = wsOnClose;
+        setTimeout(() => {
+            ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+            ws.onmessage = wsOnMessage;
+            ws.onerror = wsOnError;
+            ws.onclose = wsOnClose;
+        }, 5000);
+        console.log("wsOnError");
     }
     function wsOnClose() {
         ws.close();
-        ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
-        ws.onmessage = wsOnMessage;
-        ws.onerror = wsOnError;
-        ws.onclose = wsOnClose;
+        setTimeout(() => {
+            ws = new WebSocket("wss://heat-api.j38.net/channel/" + channelId);
+            ws.onmessage = wsOnMessage;
+            ws.onerror = wsOnError;
+            ws.onclose = wsOnClose;
+        }, 5000);
+        console.log("wsOnClose");
     }
     ws.onmessage = wsOnMessage;
     ws.onerror = wsOnError;
