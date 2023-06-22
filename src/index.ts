@@ -4,7 +4,7 @@ var CANVAS: HTMLCanvasElement = null;
 var CTX: CanvasRenderingContext2D = null;
 
 const MARKER_SPRITE = new Image(32, 32);
-MARKER_SPRITE.src = "/img/marker.svg";
+MARKER_SPRITE.src = "img/marker.svg";
 
 const POINTS: Point[] = [];
 
