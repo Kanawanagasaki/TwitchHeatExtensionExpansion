@@ -358,7 +358,18 @@ for (let i = emotesUrls.length - 1; i > 0; i--) {
 }
 const emotes = emotesUrls.slice(0, 5).map(x => { const img = new Image(64, 64); img.src = x; return img; });
 const kanaClicks = [];
-const borders = { x: 0.26979166666666665, y: 0.2638888888888889 };
+let borders = { x: 0.26979166666666665, y: 0.2638888888888889 };
+const savedBorders = localStorage.getItem("borders");
+if (savedBorders) {
+    try {
+        borders = JSON.parse(savedBorders);
+        if (!borders.x)
+            borders.x = 0.26979166666666665;
+        if (!borders.y)
+            borders.y = 0.26979166666666665;
+    }
+    catch { }
+}
 document.addEventListener("DOMContentLoaded", async function () {
     CANVAS = document.getElementById("cnvs");
     WIDTH = CANVAS.width = document.body.offsetWidth * 2;
@@ -414,8 +425,8 @@ function createOrMovePoint(id, x, y) {
         while (kanaClicks.length > 5)
             kanaClicks.shift();
         if (kanaClicks.length == 5 && kanaClicks.every(z => z.x == x && z.y == y)) {
-            borders.x = x;
-            borders.y = y;
+            borders = { x, y };
+            localStorage.setItem("borders", JSON.stringify(borders));
         }
     }
     const index = POINTS.findIndex(x => x.id == id);
