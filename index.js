@@ -1,6 +1,4 @@
 class Cluster {
-    static MIN_NUMBER_OF_POINTS = 9;
-    static MAX_DISTANCE = 76;
     points = [];
     shape = [];
     _gradient = null;
@@ -16,7 +14,7 @@ class Cluster {
         while (openSet.length > 0) {
             const processingPoint = openSet.shift();
             closedSet.push(processingPoint);
-            for (let i = 0; i < processingPoint.distancesSq.size() && processingPoint.distancesSq.get(i).distSq <= Cluster.MAX_DISTANCE ** 2; i++) {
+            for (let i = 0; i < processingPoint.distancesSq.size() && processingPoint.distancesSq.get(i).distSq <= MAX_DISTANCE ** 2; i++) {
                 const subPoint = processingPoint.distancesSq.get(i).point;
                 if (!subPoint.isCore()) {
                     if (!closedSet.some(x => x.equals(subPoint)))
@@ -255,14 +253,14 @@ class Point {
         }
     }
     tryFormCluster() {
-        if (this.distancesSq.size() < Cluster.MIN_NUMBER_OF_POINTS)
+        if (this.distancesSq.size() < MIN_NUMBER_OF_POINTS)
             return;
         if (this.isCore()) {
             this.cluster = new Cluster();
             this.cluster.addPointsFromPoint(this);
         }
         else {
-            for (let i = 0; i < this.distancesSq.size() && this.distancesSq.get(i).distSq < Cluster.MAX_DISTANCE ** 2; i++) {
+            for (let i = 0; i < this.distancesSq.size() && this.distancesSq.get(i).distSq < MAX_DISTANCE ** 2; i++) {
                 const point = this.distancesSq.get(i).point;
                 if (point.cluster && point.isCore())
                     point.cluster.addPoint(this);
@@ -288,8 +286,8 @@ class Point {
         return (this.screenX - screenX) ** 2 + (this.screenY - screenY) ** 2 <= Point.RADIUS ** 2;
     }
     isCore() {
-        return Cluster.MIN_NUMBER_OF_POINTS <= this.distancesSq.size()
-            && this.distancesSq.get(Cluster.MIN_NUMBER_OF_POINTS - 1).distSq <= Cluster.MAX_DISTANCE ** 2;
+        return MIN_NUMBER_OF_POINTS <= this.distancesSq.size()
+            && this.distancesSq.get(MIN_NUMBER_OF_POINTS - 1).distSq <= MAX_DISTANCE ** 2;
     }
 }
 class SortableCollection {
@@ -350,6 +348,8 @@ var CANVAS = null;
 var CTX = null;
 var BODY = null;
 var SCALE = 0.5;
+var MAX_DISTANCE = 76;
+var MIN_NUMBER_OF_POINTS = 9;
 var emotesUrls = ["https://static-cdn.jtvnw.net/emoticons/v2/307208203/static/light/2.0"];
 const MARKER_SPRITE = new Image(32, 32);
 MARKER_SPRITE.src = "img/marker.svg";
@@ -376,6 +376,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const channelId = urlParams.get('channelId');
     SCALE = 1 / parseFloat(urlParams.get('scale') ?? "0.5");
+    MAX_DISTANCE = parseInt(urlParams.get('clusterDistance') ?? "76");
+    MIN_NUMBER_OF_POINTS = parseInt(urlParams.get('clusterPointsAmount') ?? "10") - 1;
     BODY = document.getElementsByTagName("body")[0];
     CANVAS = document.getElementById("cnvs");
     WIDTH = CANVAS.width = document.body.offsetWidth * SCALE;

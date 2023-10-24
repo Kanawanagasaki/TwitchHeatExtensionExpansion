@@ -1,7 +1,4 @@
 class Cluster {
-    public static readonly MIN_NUMBER_OF_POINTS: number = 9;
-    public static readonly MAX_DISTANCE: number = 76;
-
     public points: Point[] = [];
     public shape: { x: number, y: number, xOuter: number, yOuter: number, xInner: number, yInner: number }[] = [];
     private _gradient: CanvasGradient = null;
@@ -22,7 +19,7 @@ class Cluster {
         while (openSet.length > 0) {
             const processingPoint = openSet.shift();
             closedSet.push(processingPoint);
-            for (let i = 0; i < processingPoint.distancesSq.size() && processingPoint.distancesSq.get(i).distSq <= Cluster.MAX_DISTANCE ** 2; i++) {
+            for (let i = 0; i < processingPoint.distancesSq.size() && processingPoint.distancesSq.get(i).distSq <= MAX_DISTANCE ** 2; i++) {
                 const subPoint = processingPoint.distancesSq.get(i).point;
                 if (!subPoint.isCore()) {
                     if (!closedSet.some(x => x.equals(subPoint)))

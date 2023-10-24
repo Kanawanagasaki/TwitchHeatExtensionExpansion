@@ -45,7 +45,7 @@ class Point {
     }
 
     public tryFormCluster() {
-        if (this.distancesSq.size() < Cluster.MIN_NUMBER_OF_POINTS)
+        if (this.distancesSq.size() < MIN_NUMBER_OF_POINTS)
             return;
 
         if (this.isCore()) {
@@ -53,7 +53,7 @@ class Point {
             this.cluster.addPointsFromPoint(this);
         }
         else {
-            for (let i = 0; i < this.distancesSq.size() && this.distancesSq.get(i).distSq < Cluster.MAX_DISTANCE ** 2; i++) {
+            for (let i = 0; i < this.distancesSq.size() && this.distancesSq.get(i).distSq < MAX_DISTANCE ** 2; i++) {
                 const point = this.distancesSq.get(i).point;
                 if (point.cluster && point.isCore())
                     point.cluster.addPoint(this);
@@ -85,7 +85,7 @@ class Point {
     }
 
     public isCore() {
-        return Cluster.MIN_NUMBER_OF_POINTS <= this.distancesSq.size()
-            && this.distancesSq.get(Cluster.MIN_NUMBER_OF_POINTS - 1).distSq <= Cluster.MAX_DISTANCE ** 2;
+        return MIN_NUMBER_OF_POINTS <= this.distancesSq.size()
+            && this.distancesSq.get(MIN_NUMBER_OF_POINTS - 1).distSq <= MAX_DISTANCE ** 2;
     }
 }

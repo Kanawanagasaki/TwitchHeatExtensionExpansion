@@ -4,6 +4,8 @@ var CANVAS: HTMLCanvasElement = null;
 var CTX: CanvasRenderingContext2D = null;
 var BODY: HTMLBodyElement = null;
 var SCALE = 0.5;
+var MAX_DISTANCE = 76;
+var MIN_NUMBER_OF_POINTS = 9;
 
 var emotesUrls = ["https://static-cdn.jtvnw.net/emoticons/v2/307208203/static/light/2.0"];
 
@@ -37,6 +39,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
     const channelId = urlParams.get('channelId');
     SCALE = 1 / parseFloat(urlParams.get('scale') ?? "0.5");
+    MAX_DISTANCE = parseInt(urlParams.get('clusterDistance') ?? "76");
+    MIN_NUMBER_OF_POINTS = parseInt(urlParams.get('clusterPointsAmount') ?? "10") - 1;
 
     BODY = document.getElementsByTagName("body")[0];
     CANVAS = document.getElementById("cnvs") as HTMLCanvasElement;
