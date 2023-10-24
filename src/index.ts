@@ -109,9 +109,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         }
 
-        for (const cluster of clusters) {
+        for (const cluster of clusters)
             cluster.draw();
-        }
 
         requestAnimationFrame(draw);
     }
@@ -157,7 +156,11 @@ function createPoint(id: string, x: number, y: number) {
         EMOTE_POINTS.push(point);
     }
     else
+    {
+        point.recalculateDistances(POINTS);
+        point.tryFormCluster();
         POINTS.push(point);
+    }
 
     return point;
 }
@@ -177,4 +180,10 @@ function removeEmotePoint(point: Point) {
     const index = EMOTE_POINTS.findIndex(x => x.equals(point));
     EMOTE_POINTS.splice(index, 1);
     point.img.remove();
+
+    for (const point2 of POINTS)
+        point2.removeDistance(point);
+
+    if (point.cluster)
+        point.cluster.removePoint(point);
 }

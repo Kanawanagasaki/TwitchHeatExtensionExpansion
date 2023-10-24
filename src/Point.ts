@@ -28,8 +28,6 @@ class Point {
         this.y = y;
         this.screenX = x * WIDTH;
         this.screenY = y * HEIGHT;
-        this.recalculateDistances(points);
-        this.tryFormCluster();
     }
 
     public recalculateDistances(points: Point[]) {

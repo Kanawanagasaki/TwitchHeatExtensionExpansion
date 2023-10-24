@@ -239,8 +239,6 @@ class Point {
         this.y = y;
         this.screenX = x * WIDTH;
         this.screenY = y * HEIGHT;
-        this.recalculateDistances(points);
-        this.tryFormCluster();
     }
     recalculateDistances(points) {
         this.distancesSq.clear();
@@ -418,9 +416,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             else
                 clusters.add(point.cluster);
         }
-        for (const cluster of clusters) {
+        for (const cluster of clusters)
             cluster.draw();
-        }
         requestAnimationFrame(draw);
     }
     requestAnimationFrame(draw);
@@ -458,8 +455,11 @@ function createPoint(id, x, y) {
         BODY.appendChild(imgEl);
         EMOTE_POINTS.push(point);
     }
-    else
+    else {
+        point.recalculateDistances(POINTS);
+        point.tryFormCluster();
         POINTS.push(point);
+    }
     return point;
 }
 function removePoint(point) {
@@ -474,5 +474,9 @@ function removeEmotePoint(point) {
     const index = EMOTE_POINTS.findIndex(x => x.equals(point));
     EMOTE_POINTS.splice(index, 1);
     point.img.remove();
+    for (const point2 of POINTS)
+        point2.removeDistance(point);
+    if (point.cluster)
+        point.cluster.removePoint(point);
 }
 //# sourceMappingURL=index.js.map
