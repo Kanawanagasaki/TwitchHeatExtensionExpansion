@@ -12,7 +12,7 @@ class Point {
 
     public cluster: Cluster = null;
 
-    private _img: HTMLImageElement = null;
+    public img: HTMLImageElement = null;
 
     public constructor(id: string, x: number, y: number, points: Point[]) {
         this.id = id;
@@ -20,7 +20,7 @@ class Point {
     }
 
     public renderAsEmote(img: HTMLImageElement) {
-        this._img = img;
+        this.img = img;
     }
 
     public setPos(x: number, y: number, points: Point[]) {
@@ -70,8 +70,8 @@ class Point {
     }
 
     public draw() {
-        if (this._img)
-            CTX.drawImage(this._img, this.screenX - 32, this.screenY - 32, 64, 64);
+        if (this.img)
+            CTX.drawImage(this.img, this.screenX - 32, this.screenY - 32, 64, 64);
         else
             CTX.drawImage(MARKER_SPRITE, this.screenX - 32, this.screenY - 60, 64, 64);
     }
